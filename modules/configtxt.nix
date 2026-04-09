@@ -34,11 +34,6 @@ in
     #
     cm4 = {
       options = {
-        # Disable OTG mode (we use USB host mode)
-        otg_mode = {
-          enable = false;
-        };
-
         # Overclocking settings for better performance
         # These are safe values tested on uConsole
         # Should be tweaked for the power efficiency
@@ -64,14 +59,6 @@ in
             no_sound_switch = opt false true; # option to disable sound routing
             energy_full_design_uwh = opt false "24790000"; # battery capacity in uWh
             charge_full_design_uah = opt false "6700000"; # battery capacity in uAh
-          };
-        };
-
-        # USB controller configuration
-        dwc2 = {
-          enable = true;
-          params = {
-            dr_mode = opt true "host"; # USB host mode (not gadget/OTG)
           };
         };
 
