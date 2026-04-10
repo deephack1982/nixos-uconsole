@@ -9,10 +9,16 @@ set -euo pipefail
 
 REPO="nixos-uconsole/nixos-uconsole"
 CACHE="nixos-clockworkpi-uconsole"
-NIX_FLAGS=(--extra-experimental-features nix-command --extra-experimental-features flakes)
+NIX_FLAGS=(--extra-experimental-features "nix-command flakes")
 
 get_latest_version() {
-  git tag -l 'v*' --sort=-version:refname 2>/dev/null | head -1 || echo "none"
+  local latest
+  latest=$(git tag -l 'v*' --sort=-version:refname 2>/dev/null | head -1)
+  if [[ -n "${latest}" ]]; then
+    echo "${latest}"
+  else
+    echo "none"
+  fi
 }
 
 show_help() {
@@ -44,9 +50,15 @@ EXAMPLES
 EOF
 }
 
-if [[ $# -eq 0 ]] || [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "help" ]]; then
+if [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "help" ]]; then
   show_help
   exit 0
+fi
+
+if [[ $# -eq 0 ]]; then
+  show_help
+  echo "Error: missing required <version> argument." >&2
+  exit 1
 fi
 
 NEXT_VERSION="v${1#v}"
